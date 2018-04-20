@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Assignment-1
 //
-//  Created by Xcode User on 2018-02-26.
+//  Created by Jatin Rampal on 2018-02-26.
 //  Copyright © 2018 Jatin Rampal. All rights reserved.
 //
 
