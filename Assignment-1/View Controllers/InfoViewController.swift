@@ -36,6 +36,9 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Do any additional setup after loading the view.
+        
+        
         let fileUrl = try!
             FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("UserDB.sqlite")
         
@@ -45,7 +48,7 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        let createTableQuery = "CREATE TABLE IF NOT EXISTS Users ( Name TEXT, Address TEXT, CITY TEXT, EMAIL TEXT, PHONE TEXT, AVATAR INT)"
+        let createTableQuery = "CREATE TABLE IF NOT EXISTS Users ( Name TEXT, Address TEXT, City TEXT, Email TEXT, Phone TEXT, Avatar INT)"
         
         if(sqlite3_exec(db, createTableQuery, nil, nil, nil) != SQLITE_OK)
         {
@@ -53,11 +56,6 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
             return
         }
         print("Everything is fine")
-        
-        
-        
-        
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func avatarSelect(_ sender : Any){
@@ -81,16 +79,12 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
          alert.addAction(okAction)
          present(alert, animated: true) */
         
-        let name = tfName.text
-        let address = tfAddress.text
-        let city = tfCity.text
-        let email = tfEmail.text
-        let phone = tfPhone.text
+        let name = tfName.text! as NSString
+        let address = tfAddress.text! as NSString
+        let city = tfCity.text! as NSString
+        let email = tfEmail.text! as NSString
+        let phone = tfPhone.text! as NSString
         
-        if(name?.isEmpty)!{
-            print("Name Error")
-            return
-        }
         
         var stmt: OpaquePointer?
         
@@ -100,23 +94,23 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
             print("Error Bounding Query")
         }
         
-        if sqlite3_bind_text(stmt, 1, name, -1, nil) != SQLITE_OK{
+        if sqlite3_bind_text(stmt, 1, name.utf8String, -1, nil) != SQLITE_OK{
             print("Error Bounding Name")
         }
         
-        if sqlite3_bind_text(stmt, 2, address, -1, nil) != SQLITE_OK{
+        if sqlite3_bind_text(stmt, 2, address.utf8String, -1, nil) != SQLITE_OK{
             print("Error Bounding Address")
         }
         
-        if sqlite3_bind_text(stmt, 3, city, -1, nil) != SQLITE_OK{
+        if sqlite3_bind_text(stmt, 3, city.utf8String, -1, nil) != SQLITE_OK{
             print("Error Bounding City")
         }
         
-        if sqlite3_bind_text(stmt, 4, email, -1, nil) != SQLITE_OK{
+        if sqlite3_bind_text(stmt, 4, email.utf8String, -1, nil) != SQLITE_OK{
             print("Error Bounding Email")
         }
         
-        if sqlite3_bind_text(stmt, 5, phone, -1, nil) != SQLITE_OK{
+        if sqlite3_bind_text(stmt, 5, phone.utf8String, -1, nil) != SQLITE_OK{
             print("Error Bounding Phone")
         }
         
@@ -125,9 +119,9 @@ class InfoViewController: UIViewController, UITextFieldDelegate {
         }
         
         if sqlite3_step(stmt) == SQLITE_DONE{
-            print("User Saved Successfully")
+            print((("User Saved Successfully: " + (name as String) as NSString) as String) + i as NSString)
         }
-        //NSLog((NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString) as String )
+        NSLog((NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString) as String )
         
     }
     
